@@ -7,7 +7,7 @@
 
 IncludeModuleLangFile(__FILE__);
 
-define('ANMASLOV_DELIVERY_DHL_WRITE_LOG', 1);
+define('ANMASLOV_DELIVERY_DHL_WRITE_LOG', 0); //write log for debugging
 
 class CDeliveryAnmaslovDHL{
 
@@ -43,14 +43,7 @@ class CDeliveryAnmaslovDHL{
 
                     "RESTRICTIONS_WEIGHT" => array(0),
                     "RESTRICTIONS_SUM" => array(0),
-                ),
-                "psv" => array(
-                    "TITLE" => GetMessage("ANMASLOV_DHL_PSV_TITLE"),
-                    "DESCRIPTION" => GetMessage("ANMASLOV_DHL_DESCRIPTION") . '<div id="injection"></div>',
-
-                    "RESTRICTIONS_WEIGHT" => array(0),
-                    "RESTRICTIONS_SUM" => array(0),
-                ),
+                )
             )
         );
     }
@@ -105,14 +98,13 @@ class CDeliveryAnmaslovDHL{
 
     function Calculate($profile, $arConfig, $arOrder)
     {
-        //CDeliveryAnmaslovDHL::__Write2log($arOrder, "out_data");
         $location_from_zip = COption::GetOptionString('sale', 'location_zip');
         CDeliveryAnmaslovDHL::__Write2log($location_from_zip, "location_from_zip");
 
         $arOrder["WEIGHT"] = CSaleMeasure::Convert($arOrder["WEIGHT"], "G", "KG");
         if ($arOrder["WEIGHT"] <= 0) $arOrder["WEIGHT"] = 0.1;
 
-        $cache_id = "dhl_rus_mas"."|".$arConfig['SITE_ID']['VALUE']."|".$arOrder["LOCATION_FROM"]."|".$location_from_zip."|".$arOrder["LOCATION_TO"]."|".$arOrder['WEIGHT'];
+        $cache_id = "dhl_rus_mas"."|".$arConfig['SITE_ID']['VALUE']."|".$location_from_zip."|".$arOrder["LOCATION_ZIP"]."|".$arOrder['WEIGHT'];
 
         self::__Write2log($cache_id, "cache_id");
 
@@ -132,7 +124,6 @@ class CDeliveryAnmaslovDHL{
                 "TRANSIT" => $transit_time,
             );
         }
-
 
         $param = array(
             "DATE" =>  self::getDate(),

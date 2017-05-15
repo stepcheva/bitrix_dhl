@@ -3,8 +3,8 @@ $MESS['ANMASLOV_DHL_MODULE_NAME'] = "Доставка DHL";
 $MESS['ANMASLOV_DHL_MODULE_DESCRIPTION'] = "Расчет стоимости доставки на основе данных сайта DHL";
 $MESS['ANMASLOV_DHL_MODULE_DESCRIPTION_INNER'] = "Расчет стоимости доставки на основе данных сайта DHL строка для админ панели";
 
-$MESS['ANMASLOV_DHL_COURIER_TITLE'] = "Курьерская доставка";
-$MESS['ANMASLOV_DHL_COURIER_DESCRIPTION'] = "Курьерская доставка DHL";
+$MESS['ANMASLOV_DHL_COURIER_TITLE'] = "Обычная доставка";
+$MESS['ANMASLOV_DHL_COURIER_DESCRIPTION'] = "Обычная доставка DHL";
 $MESS['ANMASLOV_DHL_PSV_TITLE'] = "Пункт самовывоза*";
 $MESS['ANMASLOV_DHL_PSV_DESCRIPTION'] = "Доставка до пункта самовывоза DHL*";
 
