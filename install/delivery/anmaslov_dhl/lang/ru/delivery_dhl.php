@@ -8,7 +8,7 @@ $MESS['ANMASLOV_DHL_COURIER_DESCRIPTION'] = "Обычная доставка DHL
 $MESS['ANMASLOV_DHL_PSV_TITLE'] = "Пункт самовывоза*";
 $MESS['ANMASLOV_DHL_PSV_DESCRIPTION'] = "Доставка до пункта самовывоза DHL*";
 
-$MESS['ANMASLOV_DHL_PERIOD'] =  "Число дней для доставки";
+$MESS['ANMASLOV_DHL_PERIOD'] =  "Приблизительное число дней для доставки";
 $MESS['ANMASLOV_DHL_CONFIG_TITLE'] = "Настройка API DHL";
 $MESS['ANMASLOV_DHL_DHL_SERVER_PATH'] = "Путь до сервера DHL";
 $MESS['ANMASLOV_DHL_SITE_ID'] = "Идентификатор (SITE_ID)";

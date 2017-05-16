@@ -121,7 +121,7 @@ class CDeliveryAnmaslovDHL{
             return array(
                 "RESULT" => "OK",
                 "VALUE" => $result,
-                "TRANSIT" => $transit_time,
+                "TRANSIT" => GetMessage('ANMASLOV_DHL_PERIOD').' '.$transit_time,
             );
         }
 
@@ -164,7 +164,7 @@ class CDeliveryAnmaslovDHL{
         return array(
             "RESULT" => "OK",
             "VALUE" => $req['PRICE'],
-            "TRANSIT" => $req['DAYS'],
+            "TRANSIT" => GetMessage('ANMASLOV_DHL_PERIOD').' '.$req['DAYS'],
         );
     }
 
