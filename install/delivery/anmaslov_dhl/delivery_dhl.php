@@ -103,6 +103,7 @@ class CDeliveryAnmaslovDHL{
 
         $arOrder["WEIGHT"] = CSaleMeasure::Convert($arOrder["WEIGHT"], "G", "KG");
         if ($arOrder["WEIGHT"] <= 0) $arOrder["WEIGHT"] = 0.1;
+        $arOrder["WEIGHT"] = round($arOrder["WEIGHT"], 3);
 
         $cache_id = "dhl_rus_mas"."|".$arConfig['SITE_ID']['VALUE']."|".$location_from_zip."|".$arOrder["LOCATION_ZIP"]."|".$arOrder['WEIGHT'];
 
