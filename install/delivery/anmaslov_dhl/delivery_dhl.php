@@ -101,11 +101,19 @@ class CDeliveryAnmaslovDHL{
         $location_from_zip = COption::GetOptionString('sale', 'location_zip');
         CDeliveryAnmaslovDHL::__Write2log($location_from_zip, "location_from_zip");
 
+        if (strlen($arOrder["LOCATION_ZIP"]) > 0)
+        {
+            $zip_to = $arOrder["LOCATION_ZIP"];
+        }else{
+            $zip_to = self::getZip($arOrder["LOCATION_TO"]);
+        }
+        //todo if zip_to is null - drop error
+
         $arOrder["WEIGHT"] = CSaleMeasure::Convert($arOrder["WEIGHT"], "G", "KG");
         if ($arOrder["WEIGHT"] <= 0) $arOrder["WEIGHT"] = 0.1;
         $arOrder["WEIGHT"] = round($arOrder["WEIGHT"], 3);
 
-        $cache_id = "dhl_rus_mas"."|".$arConfig['SITE_ID']['VALUE']."|".$location_from_zip."|".$arOrder["LOCATION_ZIP"]."|".$arOrder['WEIGHT'];
+        $cache_id = "dhl_rus_mas"."|".$arConfig['SITE_ID']['VALUE']."|".$location_from_zip."|".$zip_to."|".$arOrder['WEIGHT'];
 
         self::__Write2log($cache_id, "cache_id");
 
@@ -129,7 +137,7 @@ class CDeliveryAnmaslovDHL{
         $param = array(
             "DATE" =>  self::getDate(),
             "ZIP_FROM" => $location_from_zip,
-            "ZIP_TO" => $arOrder["LOCATION_ZIP"],
+            "ZIP_TO" => $zip_to,
             "WEIGHT" => $arOrder["WEIGHT"],
             "SITE_ID" => $arConfig['SITE_ID']['VALUE'],
             "PASSWORD" => $arConfig['PASSWORD']['VALUE'],
@@ -167,6 +175,22 @@ class CDeliveryAnmaslovDHL{
             "VALUE" => $req['PRICE'],
             "TRANSIT" => GetMessage('ANMASLOV_DHL_PERIOD').' '.$req['DAYS'],
         );
+    }
+
+    function getZip($location)
+    {
+        $ID = CSaleLocation::getLocationIDbyCODE($location);
+        $zipList = CSaleLocation::GetLocationZIP($ID);
+
+        if ($arZip = $zipList->Fetch())
+        {
+            if (!empty($arZip['ZIP']))
+            {
+                return $arZip['ZIP'];
+            }
+        }
+
+        return false;
     }
 
     function getDate()
