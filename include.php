@@ -6,7 +6,8 @@ CModule::AddAutoloadClasses(
     $module_id,
     array(
         "DhlAPI" => "classes/general/DhlApi.php",
-        "CDeliveryAnmaslovDhl" => "classes/general/PeshkarikiDelivery.php",
+        "XMLGenerator" => "classes/general/XMLGenerator.php",
+        "CDeliveryAnmaslovDhl" => "classes/general/DhlDelivery.php",
         "CUtilsDhl" => "classes/general/Utils.php",
     )
 );

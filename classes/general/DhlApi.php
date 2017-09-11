@@ -1,7 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: alexey
- * Date: 11.09.17
- * Time: 14:41
- */
+
+use \Bitrix\Main\Web\HttpClient;
+
+IncludeModuleLangFile(__FILE__);
+
+class DHLApi
+{
+    public static function Calculate($arOrder, $arConfig)
+    {
+        $result = array('STATUS' => 'ERROR', 'BODY' => GetMessage('ANMASLOV_DHL_CALULATE_ERROR'));
+        
+        
+
+        return $result;
+    }
+}
