@@ -69,14 +69,14 @@ class DHLApi
                 $httpClient->setHeader('Content-Type', 'application/xml', true);
 
                 try {
-                    $response = $httpClient->post(
+                    $response = parseResult($httpClient->post(
                         $arConfig['SERVER']['VALUE'],
                         $this->xmlGenerator->generate($p)
+                        )
                     );
 
-                    if (isset($response->errors)) {
-                        $result['BODY'] = "some error from site dhl";
-
+                    if (!$response) {
+                        $result['MESSAGE'] = GetMessage('ANMASLOV_DHL_SERVICE_IS_NOT_AVIABLE');
                     } else {
                         $result['STATUS'] = 'OK';
                         $result['MESSAGE'] = array($response->price, $response->transition);

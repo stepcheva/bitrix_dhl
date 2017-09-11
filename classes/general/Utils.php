@@ -26,6 +26,23 @@ class CUtilsDhl
         }
     }
 
+    public static function parseResult($req)
+    {
+        $xml = simplexml_load_string($req);
+        if ($xml)
+        {
+            $info = $xml->GetQuoteResponse->BkgDetails->QtdShp;
+            if ($info)
+            {
+                return array(
+                    "PRICE" => strval($info->ShippingCharge),
+                    "TAX" => strval($info->WeightChargeTax),
+                    "DAYS" => strval($info->TotalTransitDays),
+                );
+            }
+        }
+    }
+
     public static function getZip($location)
     {
         $ID = CSaleLocation::getLocationIDbyCODE($location);
