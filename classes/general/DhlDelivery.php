@@ -89,27 +89,30 @@ Class CDeliveryAnmaslovDHL
 
     function Compability($arOrder, $arConfig)
     {
+        /*
         $dhlApi = new DHLApi(new DomDocumentGenerator());
         $response = $dhlApi->Calculate($arOrder, $arConfig);
 
         $profile_list = array();
         if ($response['STATUS'] == 'OK') {
             $profile_list[] = 'courier';
-        }
-
+        }*/
+        //always show this delivery method
+        $profile_list = array();
+        $profile_list[] = 'courier';
         return $profile_list;
     }
 
     function Calculate($profile, $arConfig, $arOrder)
     {
-        $dhlApi = new DHLApi(new DomDocumentGenerator());
+        $dhlApi = new DHLApi(new StringXMLGenerator());
         $response = $dhlApi->Calculate($arOrder, $arConfig);
 
         if ($response['STATUS'] == 'OK') {
             return array(
                 'RESULT' => 'OK',
-                'VALUE' => GetMessage("ANMASLOV_DHL_PERIOD").$response['MESSAGE'][0],
-                'TRANSIT' => $response['MESSAGE'][1]
+                'VALUE' => $response['MESSAGE'][0],
+                'TRANSIT' => GetMessage("ANMASLOV_DHL_PERIOD").$response['MESSAGE'][1]
             );
         }
 

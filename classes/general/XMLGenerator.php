@@ -91,3 +91,19 @@ class DomDocumentGenerator implements XMLgenerator
     }
 
 }
+
+class StringXMLGenerator implements XMLgenerator
+{
+    public function generate(ParamsDto $param)
+    {
+        $xmlStr = '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        $xmlStr .= '<p:DCTRequest xmlns:p="http://www.dhl.com" xmlns:p1="http://www.dhl.com/datatypes" xmlns:p2="http://www.dhl.com/DCTRequestdatatypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
+        $xmlStr .= '<GetQuote><Request><ServiceHeader><MessageTime>'.date('Y-m-d').'T'.date('H:i:sP').'</MessageTime><MessageReference>1234567890123456789012345678901</MessageReference><SiteID>';
+        $xmlStr .= $param->siteId .'</SiteID><Password>'.$param->password.'</Password></ServiceHeader></Request><From><CountryCode>RU</CountryCode><Postalcode>';
+        $xmlStr .= $param->zip_from .'</Postalcode></From><BkgDetails><PaymentCountryCode>RU</PaymentCountryCode><Date>'.$param->date.'</Date><ReadyTime>PT10H00M</ReadyTime><DimensionUnit>CM</DimensionUnit><WeightUnit>KG</WeightUnit><ShipmentWeight>';
+        $xmlStr .= $param->weight .'</ShipmentWeight><PaymentAccountNumber>'.$param->account.'</PaymentAccountNumber><IsDutiable>N</IsDutiable><NetworkTypeCode>TD</NetworkTypeCode><QtdShp><GlobalProductCode>N</GlobalProductCode><LocalProductCode>N</LocalProductCode>';
+        $xmlStr .= '</QtdShp></BkgDetails><To><CountryCode>RU</CountryCode><Postalcode>'.$param->zip_to.'</Postalcode></To></GetQuote></p:DCTRequest>';
+
+        return $xmlStr;
+    }
+}
