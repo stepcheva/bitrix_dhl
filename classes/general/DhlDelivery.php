@@ -89,7 +89,7 @@ Class CDeliveryAnmaslovDHL
 
     function Compability($arOrder, $arConfig)
     {
-        $dhlApi = new DHLApi(new XMLGenerator());
+        $dhlApi = new DHLApi(new DomDocumentGenerator());
         $response = $dhlApi->Calculate($arOrder, $arConfig);
 
         $profile_list = array();
@@ -102,13 +102,13 @@ Class CDeliveryAnmaslovDHL
 
     function Calculate($profile, $arConfig, $arOrder)
     {
-        $dhlApi = new DHLApi(new XMLGenerator());
+        $dhlApi = new DHLApi(new DomDocumentGenerator());
         $response = $dhlApi->Calculate($arOrder, $arConfig);
 
-        if ($response['RESULT'] == 'OK') {
+        if ($response['STATUS'] == 'OK') {
             return array(
                 'RESULT' => 'OK',
-                'VALUE' => $response['MESSAGE'][0],
+                'VALUE' => GetMessage("ANMASLOV_DHL_PERIOD").$response['MESSAGE'][0],
                 'TRANSIT' => $response['MESSAGE'][1]
             );
         }

@@ -18,7 +18,7 @@ class CUtilsDhl
 
             CEventLog::Add(array(
                 "SEVERITY" => $severity,
-                "AUDIT_TYPE_ID" => "PESHKARIKI_TYPE",
+                "AUDIT_TYPE_ID" => "DHL_TYPE",
                 "MODULE_ID" => self::MODULE_ID,
                 "ITEM_ID" => $object,
                 "DESCRIPTION" => $data,

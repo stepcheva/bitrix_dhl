@@ -32,7 +32,7 @@ class DHLApi
 
         if (strlen($param->zip_to) == 0)
         {
-            CUtilsDhl::WRITE_LOG('params zip to is empty');
+            CUtilsDhl::addLog('params zip to is empty');
             $this->params = null;
             return false;
         }
@@ -58,10 +58,10 @@ class DHLApi
             $life_time = 10*60;
             $p = $this->params;
             $cache_id = "dhl_rus_mas"."|".$arConfig['SITE_ID']['VALUE']."|".$p->zip_from."|".$p->zip_to."|".$p->weight;
-            CUtilsDhl::WRITE_LOG($cache_id);
+            CUtilsDhl::addLog($cache_id);
 
             if ($obCache->InitCache($life_time, $cache_id)) {
-                CUtilsDhl::WRITE_LOG('Get data from cache');
+                CUtilsDhl::addLog('Get data from cache');
                 $vars = $obCache->GetVars();
                 $result = $vars["VALUE"];
             } else {
@@ -69,17 +69,14 @@ class DHLApi
                 $httpClient->setHeader('Content-Type', 'application/xml', true);
 
                 try {
-                    $response = parseResult($httpClient->post(
-                        $arConfig['SERVER']['VALUE'],
-                        $this->xmlGenerator->generate($p)
-                        )
-                    );
+                    $outResponce = $httpClient->post($arConfig['SERVER']['VALUE'], $this->xmlGenerator->generate($p) );
+                    $response = CUtilsDhl::parseResult($outResponce);
 
                     if (!$response) {
                         $result['MESSAGE'] = GetMessage('ANMASLOV_DHL_SERVICE_IS_NOT_AVIABLE');
                     } else {
                         $result['STATUS'] = 'OK';
-                        $result['MESSAGE'] = array($response->price, $response->transition);
+                        $result['MESSAGE'] = array($response['PRICE'], $response['DAYS']);
                     }
 
                 } catch (Exception $e) {
