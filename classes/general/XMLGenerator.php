@@ -22,22 +22,14 @@ class ParamsDto
 
 interface XMLgenerator
 {
-    public function __construct(ParamsDto $param);
-
-    public function generate();
+    public function generate(ParamsDto $param);
 }
 
 class DomDocumentGenerator implements XMLgenerator
 {
-    private $params;
     private $xml;
 
-    public function __construct(ParamsDto $param)
-    {
-        $this->params = $param;
-    }
-
-    public function generate()
+    public function generate(ParamsDto $param)
     {
         $this->xml = new \DOMDocument('1.0', 'UTF-8');
 
@@ -60,26 +52,26 @@ class DomDocumentGenerator implements XMLgenerator
 
         $ServiceHeader->appendChild($this->xml->createElement('MessageTime', date('Y-m-d').'T'.date('H:i:sP')));
         $ServiceHeader->appendChild($this->xml->createElement('MessageReference','1234567890123456789012345678901'));
-        $ServiceHeader->appendChild($this->xml->createElement('SiteID', $this->params->siteId));
-        $ServiceHeader->appendChild($this->xml->createElement('Password', $this->params->password));
+        $ServiceHeader->appendChild($this->xml->createElement('SiteID', $param->siteId));
+        $ServiceHeader->appendChild($this->xml->createElement('Password', $param->password));
 
 
         $From = $this->xml->createElement("From");
         $From = $getQuote->appendChild($From);
 
         $From->appendChild($this->xml->createElement('CountryCode','RU'));
-        $From->appendChild($this->xml->createElement('Postalcode',$this->params->zip_from));
+        $From->appendChild($this->xml->createElement('Postalcode', $param->zip_from));
 
         $BkgDetails = $this->xml->createElement("BkgDetails");
         $BkgDetails = $getQuote->appendChild($BkgDetails);
 
         $BkgDetails->appendChild($this->xml->createElement('PaymentCountryCode','RU'));
-        $BkgDetails->appendChild($this->xml->createElement('Date', $this->params->date));
+        $BkgDetails->appendChild($this->xml->createElement('Date', $param->date));
         $BkgDetails->appendChild($this->xml->createElement('ReadyTime','PT10H00M'));
         $BkgDetails->appendChild($this->xml->createElement('DimensionUnit','CM'));
         $BkgDetails->appendChild($this->xml->createElement('WeightUnit','KG'));
-        $BkgDetails->appendChild($this->xml->createElement('ShipmentWeight', $this->params->weight));
-        $BkgDetails->appendChild($this->xml->createElement('PaymentAccountNumber', $this->params->account));
+        $BkgDetails->appendChild($this->xml->createElement('ShipmentWeight', $param->weight));
+        $BkgDetails->appendChild($this->xml->createElement('PaymentAccountNumber', $param->account));
         $BkgDetails->appendChild($this->xml->createElement('IsDutiable','N'));
         $BkgDetails->appendChild($this->xml->createElement('NetworkTypeCode','TD'));
 
@@ -93,7 +85,7 @@ class DomDocumentGenerator implements XMLgenerator
         $To = $getQuote->appendChild($To);
 
         $To->appendChild($this->xml->createElement('CountryCode','RU'));
-        $To->appendChild($this->xml->createElement('Postalcode', $this->params->zip_to));
+        $To->appendChild($this->xml->createElement('Postalcode', $param->zip_to));
 
         return $this->xml->saveXML();
     }
