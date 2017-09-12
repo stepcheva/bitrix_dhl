@@ -5,7 +5,7 @@ IncludeModuleLangFile(__FILE__);
 class CUtilsDhl
 {
     const MODULE_ID = "anmaslov.dhl";
-    const WRITE_LOG = 'Y';
+    const WRITE_LOG = 'N';
 
     public static function addLog($data, $object = 'anmaslov.dhl', $severity = 'DEBUG')
     {

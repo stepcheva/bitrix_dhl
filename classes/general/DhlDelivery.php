@@ -1,5 +1,7 @@
 <?php
 
+IncludeModuleLangFile(__FILE__);
+
 Class CDeliveryAnmaslovDHL
 {
     function Init()
