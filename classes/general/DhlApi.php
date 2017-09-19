@@ -25,17 +25,29 @@ class DHLApi
 
         $param->zip_from = COption::GetOptionString('sale', 'location_zip');
 
-        if (strlen($arOrder["LOCATION_ZIP"]) > 0)
-            $param->zip_to = $arOrder["LOCATION_ZIP"];
-        else
-            $param->zip_to = CUtilsDhl::getZip($arOrder["LOCATION_TO"]);
+        $arLocation = CUtilsDhl::getLocation($arOrder["LOCATION_TO"]);
+        $param->country_to = Country::getCountryCode($arLocation[0]);
 
-        if (strlen($param->zip_to) == 0)
+        if ($param->country_to == 'RU') // zip only ru
         {
-            CUtilsDhl::addLog('params zip to is empty');
-            $this->params = null;
-            return false;
+            $param->zip_to = empty($arOrder["LOCATION_ZIP"]) ? CUtilsDhl::getZip($arOrder["LOCATION_TO"]) : $arOrder["LOCATION_ZIP"];
+            if (empty($param->zip_to))
+            {
+                CUtilsDhl::addLog('params zip to is empty');
+                $this->params = null;
+                return false;
+            }
+        } else {
+            if (empty($arLocation[1]))
+            {
+                CUtilsDhl::addLog('City is not found');
+                $this->params = null;
+                return false;
+            }
+            $param->city_to = $arLocation[1];
         }
+
+        AddMessage2Log($param, 'param');
 
         $weight = CSaleMeasure::Convert($arOrder["WEIGHT"], "G", "KG");
         if ($weight <= 0) $weight = 0.1;
@@ -57,7 +69,9 @@ class DHLApi
             $obCache = new CPHPCache();
             $life_time = 10*60;
             $p = $this->params;
-            $cache_id = "dhl_rus_mas"."|".$arConfig['SITE_ID']['VALUE']."|".$p->zip_from."|".$p->zip_to."|".$p->weight;
+            $cache_id = "dhl_rus_mas"."|".$arConfig['SITE_ID']['VALUE']."|".$p->zip_from."|".
+                $p->country_to."|".$p->zip_to."|".$p->city_to."|".$p->weight;
+
             CUtilsDhl::addLog($cache_id);
 
             if ($obCache->InitCache($life_time, $cache_id)) {

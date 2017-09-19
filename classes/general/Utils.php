@@ -59,6 +59,12 @@ class CUtilsDhl
         return false;
     }
 
+    public static function getLocation($locationId)
+    {
+        $arLocation = CSaleLocation::GetByID($locationId, 'en');
+        return array($arLocation['COUNTRY_NAME'], $arLocation['CITY_NAME']);
+    }
+
     public static function getNextDay()
     {
         $timestamp = strtotime(date('Y-m-d'));

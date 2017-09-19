@@ -1,12 +1,14 @@
 <?php
 
-
 class ParamsDto
 {
     public $date;
     public $zip_from;
     public $zip_to;
     public $weight;
+    public $country_from;
+    public $country_to;
+    public $city_to;
 
     public $siteId;
     public $password;
@@ -78,14 +80,19 @@ class DomDocumentGenerator implements XMLgenerator
         $QtdShp = $this->xml->createElement("QtdShp");
         $QtdShp = $BkgDetails->appendChild($QtdShp);
 
-        $QtdShp->appendChild($this->xml->createElement('GlobalProductCode','N'));
-        $QtdShp->appendChild($this->xml->createElement('LocalProductCode','N'));
+        //$QtdShp->appendChild($this->xml->createElement('GlobalProductCode','N'));
+        //$QtdShp->appendChild($this->xml->createElement('LocalProductCode','N'));
 
         $To = $this->xml->createElement("To");
         $To = $getQuote->appendChild($To);
 
-        $To->appendChild($this->xml->createElement('CountryCode','RU'));
-        $To->appendChild($this->xml->createElement('Postalcode', $param->zip_to));
+        $To->appendChild($this->xml->createElement('CountryCode', $param->country_to));
+
+        if (!empty($param->zip_to))
+            $To->appendChild($this->xml->createElement('Postalcode', $param->zip_to));
+
+        if (!empty($param->city_to))
+            $To->appendChild($this->xml->createElement('City', $param->city_to));
 
         return $this->xml->saveXML();
     }
@@ -101,8 +108,13 @@ class StringXMLGenerator implements XMLgenerator
         $xmlStr .= '<GetQuote><Request><ServiceHeader><MessageTime>'.date('Y-m-d').'T'.date('H:i:sP').'</MessageTime><MessageReference>1234567890123456789012345678901</MessageReference><SiteID>';
         $xmlStr .= $param->siteId .'</SiteID><Password>'.$param->password.'</Password></ServiceHeader></Request><From><CountryCode>RU</CountryCode><Postalcode>';
         $xmlStr .= $param->zip_from .'</Postalcode></From><BkgDetails><PaymentCountryCode>RU</PaymentCountryCode><Date>'.$param->date.'</Date><ReadyTime>PT10H00M</ReadyTime><DimensionUnit>CM</DimensionUnit><WeightUnit>KG</WeightUnit><ShipmentWeight>';
-        $xmlStr .= $param->weight .'</ShipmentWeight><PaymentAccountNumber>'.$param->account.'</PaymentAccountNumber><IsDutiable>N</IsDutiable><NetworkTypeCode>TD</NetworkTypeCode><QtdShp><GlobalProductCode>N</GlobalProductCode><LocalProductCode>N</LocalProductCode>';
-        $xmlStr .= '</QtdShp></BkgDetails><To><CountryCode>RU</CountryCode><Postalcode>'.$param->zip_to.'</Postalcode></To></GetQuote></p:DCTRequest>';
+        $xmlStr .= $param->weight .'</ShipmentWeight><PaymentAccountNumber>'.$param->account.'</PaymentAccountNumber><IsDutiable>N</IsDutiable><NetworkTypeCode>TD</NetworkTypeCode>';
+        $xmlStr .= '</BkgDetails><To><CountryCode>'.$param->country_to.'</CountryCode>';
+
+        $xmlStr .= empty($param->zip_to) ? '' : '<Postalcode>'.$param->zip_to.'</Postalcode>';
+        $xmlStr .= empty($param->city_to) ? '' : '<City>'.$param->city_to.'</City>';
+
+        $xmlStr .= '</To></GetQuote></p:DCTRequest>';
 
         return $xmlStr;
     }
